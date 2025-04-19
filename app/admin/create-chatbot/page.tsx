@@ -9,10 +9,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bot, Plus, Trash2, Upload } from "lucide-react"
+import { useUser } from "@clerk/nextjs"
 
 export default function CreateChatbotPage() {
+  const BASE_URL = 'http://localhost:8000'
+  const { user } = useUser()
   const [chatbotName, setChatbotName] = useState("")
-  const [category, setCategory] = useState("")
   const [characteristics, setCharacteristics] = useState([
     { id: 1, content: "I am a helpful assistant." },
     { id: 2, content: "I provide accurate information about products and services." },
@@ -37,6 +39,34 @@ export default function CreateChatbotPage() {
     const randomSeed = seeds[Math.floor(Math.random() * seeds.length)]
     setAvatarSeed(randomSeed + Math.random().toString(36).substring(2, 8))
   }
+    const insertChatbot = async () => {
+      const response = await fetch(`${BASE_URL}/create_chatbot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: chatbotName,
+          clerk_user_id: user?.id,
+        }),
+      });
+     
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+      
+        const chatbotId = data.id;
+        console.log(chatbotId)
+    
+  ;
+      
+      } else {
+        const error = await response.json();
+        console.error("Error creating chatbot:", error);
+      
+      }
+    };
+  
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -45,8 +75,8 @@ export default function CreateChatbotPage() {
           <h1 className="text-3xl font-bold tracking-tight">Create Chatbot</h1>
           <p className="text-muted-foreground">Design a new chatbot with custom characteristics and behavior.</p>
         </div>
-        <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
-          Save Chatbot
+        <Button onClick={insertChatbot} className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
+          Create Chatbot
         </Button>
       </div>
 
@@ -67,21 +97,6 @@ export default function CreateChatbotPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger id="category">
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="customer-support">Customer Support</SelectItem>
-                  <SelectItem value="sales">Sales</SelectItem>
-                  <SelectItem value="technical">Technical Support</SelectItem>
-                  <SelectItem value="onboarding">User Onboarding</SelectItem>
-                  <SelectItem value="faq">FAQ</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
             <div className="space-y-2">
               <Label>Chatbot Avatar</Label>
@@ -95,15 +110,7 @@ export default function CreateChatbotPage() {
                     <Bot size={24} />
                   </AvatarFallback>
                 </Avatar>
-                <div className="space-y-2">
-                  <Button variant="outline" size="sm" onClick={generateNewAvatar} className="w-full">
-                    Generate Random
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full">
-                    <Upload size={14} className="mr-2" />
-                    Upload
-                  </Button>
-                </div>
+              
               </div>
             </div>
           </CardContent>
@@ -119,14 +126,6 @@ export default function CreateChatbotPage() {
               <div key={characteristic.id} className="space-y-2 relative group">
                 <div className="flex items-center justify-between">
                   <Label htmlFor={`characteristic-${characteristic.id}`}>Characteristic {characteristic.id}</Label>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemoveCharacteristic(characteristic.id)}
-                    className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Trash2 size={14} className="text-destructive" />
-                  </Button>
                 </div>
                 <Textarea
                   id={`characteristic-${characteristic.id}`}
