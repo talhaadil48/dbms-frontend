@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bot, Plus, Trash2, Upload } from "lucide-react"
+import { Bot, Plus, Trash, Trash2, Upload } from "lucide-react"
 import { useUser } from "@clerk/nextjs"
 
 export default function CreateChatbotPage() {
@@ -39,7 +39,7 @@ export default function CreateChatbotPage() {
     const randomSeed = seeds[Math.floor(Math.random() * seeds.length)]
     setAvatarSeed(randomSeed + Math.random().toString(36).substring(2, 8))
   }
-    const insertChatbot = async () => {
+  const insertChatbot = async () => {
       const response = await fetch(`${BASE_URL}/create_chatbot`, {
         method: "POST",
         headers: {
@@ -53,16 +53,34 @@ export default function CreateChatbotPage() {
      
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
+        
       
         const chatbotId = data.id;
-        console.log(chatbotId)
-    
-  ;
-      
+        characteristics.map(async (characteristic) => {
+          const response = await fetch(`${BASE_URL}/characteristics`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              chatbot_id: chatbotId,
+              content: characteristic.content
+            }),
+          });
+
+          if (response.ok) {
+            console.log("Characteristic created successfully:", await response.json());
+          } else {
+            const error = await response.json();
+            console.log("Error creating characteristic:", error);
+          }
+         
+        })
+
+          
       } else {
         const error = await response.json();
-        console.error("Error creating chatbot:", error);
+        console.log("Error creating chatbot:", error);
       
       }
     };
@@ -127,6 +145,13 @@ export default function CreateChatbotPage() {
                 <div className="flex items-center justify-between">
                   <Label htmlFor={`characteristic-${characteristic.id}`}>Characteristic {characteristic.id}</Label>
                 </div>
+                <Button
+                  variant="ghost"
+                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100"
+                  onClick={() => handleRemoveCharacteristic(characteristic.id)}>
+                    {/* <Trash2 size={16} color></Trash2> */}
+                  <Trash size={16} className="text-red-500" />
+                  </Button>
                 <Textarea
                   id={`characteristic-${characteristic.id}`}
                   placeholder="e.g., I am friendly and helpful."

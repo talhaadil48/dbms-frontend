@@ -50,11 +50,6 @@ export default function AdminLayout({
       icon: <Plus size={20} />,
     },
     {
-      title: "Edit Chatbots",
-      href: "/admin/edit-chatbot",
-      icon: <Bot size={20} />,
-    },
-    {
       title: "Chat Sessions",
       href: "/admin/chat-sessions",
       icon: <MessageSquare size={20} />,

@@ -1,8 +1,49 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Activity, Bot, MessageSquare, Users } from "lucide-react"
 import { ChatbotList } from "@/components/chatbot-list"
+import { useUser } from "@clerk/nextjs"
+import { useState,useEffect } from "react"
 
 export default function DashboardPage() {
+  const BASE_URL = 'http://localhost:8000'
+  const { user } = useUser();
+  const [chatbots, setChatbots] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchChatbots = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/chatbotbyuser/${user.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch chatbots");
+        }
+        console.log(response)
+
+        const data = await response.json();
+        const formattedData = Array.isArray(data) ? data : [];
+        setChatbots(formattedData);
+       
+      } catch (error) {
+        console.error("Error fetching chatbots:", error);
+      }
+    };
+
+    fetchChatbots();
+  }, [user]);
+
+
+  
+
+
   return (
     <div className="space-y-6 animate-fade-in">
       <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -58,7 +99,7 @@ export default function DashboardPage() {
 
       <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Your Chatbots</h2>
-        <ChatbotList />
+        <ChatbotList chatbots={chatbots}/>
       </div>
     </div>
   )
