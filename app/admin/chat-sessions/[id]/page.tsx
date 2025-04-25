@@ -1,64 +1,139 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bot, User, ArrowLeft } from "lucide-react"
+import { User, ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import { ElegantLoader } from "@/components/elegant-loader"
+import CustomAvatar from "@/components/avatar"
 
-// Mock data for a specific chat session
-const mockChatSession = {
-  id: 101,
-  chatbotName: "Customer Support Bot",
-  chatbotAvatar: "bottts1234",
-  guestName: "John Doe",
-  timestamp: "2023-04-15T14:30:00Z",
-  messages: [
-    { id: 1, content: "Hello! How can I assist you today?", sender: "ai", timestamp: "2023-04-15T14:25:00Z" },
-    { id: 2, content: "I have a question about my recent order.", sender: "user", timestamp: "2023-04-15T14:26:00Z" },
-    {
-      id: 3,
-      content: "I'd be happy to help. Could you please provide your order number?",
-      sender: "ai",
-      timestamp: "2023-04-15T14:26:30Z",
-    },
-    { id: 4, content: "Sure, it's ORD123456.", sender: "user", timestamp: "2023-04-15T14:27:00Z" },
-    {
-      id: 5,
-      content: "Thank you. I've located your order. What specific information do you need?",
-      sender: "ai",
-      timestamp: "2023-04-15T14:27:30Z",
-    },
-    { id: 6, content: "I want to know when it will be delivered.", sender: "user", timestamp: "2023-04-15T14:28:00Z" },
-    {
-      id: 7,
-      content: "According to our records, your order is scheduled for delivery on April 18th.",
-      sender: "ai",
-      timestamp: "2023-04-15T14:28:30Z",
-    },
-    { id: 8, content: "Thank you for your help!", sender: "user", timestamp: "2023-04-15T14:29:00Z" },
-    {
-      id: 9,
-      content: "You're welcome! Is there anything else I can help you with?",
-      sender: "ai",
-      timestamp: "2023-04-15T14:29:30Z",
-    },
-    { id: 10, content: "No, that's all. Have a great day!", sender: "user", timestamp: "2023-04-15T14:30:00Z" },
-  ],
+interface ChatSessionResponse {
+  id: number
+  created_at: string
+  messages: {
+    id: number
+    content: string
+    sender: "ai" | "user"
+    created_at: string
+  }[]
+  chatbots: {
+    name: string
+  }
+  guests: {
+    name: string
+    email: string
+  }
+}
+
+interface FormattedChatSession {
+  id: number
+  chatbotName: string
+  chatbotAvatar: string
+  guestName: string
+  timestamp: string
+  messages: {
+    id: number
+    content: string
+    sender: "ai" | "user"
+    timestamp: string
+  }[]
 }
 
 export default function ChatSessionPage() {
   const params = useParams()
-  const [session, setSession] = useState(mockChatSession)
+  const router = useRouter()
+  const [session, setSession] = useState<FormattedChatSession | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // In a real application, you would fetch the session data based on the ID
-    console.log("Fetching session with ID:", params.id)
-    // For now, we'll just use the mock data
-    setSession(mockChatSession)
+    const fetchChatSession = async () => {
+      if (!params.id) return
+
+      setIsLoading(true)
+      setError(null)
+
+      try {
+        const BASE_URL = "http://localhost:8000"
+        const response = await fetch(`${BASE_URL}/chatsessionmessages/${params.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch chat session: ${response.status}`)
+        }
+
+        const data = (await response.json()) as ChatSessionResponse
+
+        // Transform the data to match the expected structure
+        const formattedSession: FormattedChatSession = {
+          id: data.id,
+          chatbotName: data.chatbots?.name || "Unknown Chatbot",
+          // Generate a consistent avatar seed based on chatbot name
+          chatbotAvatar: `bottts${data.id}`,
+          guestName: data.guests?.name || "Unknown Guest",
+          timestamp: data.created_at,
+          messages: data.messages.map((message) => ({
+            id: message.id,
+            content: message.content,
+            sender: message.sender,
+            timestamp: message.created_at,
+          })),
+        }
+
+        setSession(formattedSession)
+      } catch (error) {
+        console.error("Error fetching chat session:", error)
+        setError(error instanceof Error ? error.message : "An unknown error occurred")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchChatSession()
   }, [params.id])
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center p-6 bg-red-50 rounded-lg">
+        <h2 className="text-xl font-semibold text-red-600">Error</h2>
+        <p className="text-red-500">{error}</p>
+        <div className="flex justify-center gap-4 mt-4">
+          <Button variant="outline" onClick={() => router.back()}>
+            Go Back
+          </Button>
+          <Button variant="default" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!session) {
+    return (
+      <div className="text-center p-6 bg-secondary/30 rounded-lg">
+        <h2 className="text-xl font-semibold">Chat Session Not Found</h2>
+        <p className="text-muted-foreground">The requested chat session could not be found.</p>
+        <Button variant="outline" className="mt-4" onClick={() => router.back()}>
+          Go Back
+        </Button>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -89,32 +164,25 @@ export default function ChatSessionPage() {
                 <div
                   className={`flex gap-2 max-w-[80%] ${message.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
                 >
-                  <Avatar className="h-8 w-8 mt-1">
-                    {message.sender === "ai" ? (
-                      <>
-                        <AvatarImage
-                          src={`https://api.dicebear.com/7.x/${session.chatbotAvatar.split(/[0-9]/)[0]}/svg?seed=${session.chatbotAvatar}`}
-                          alt={session.chatbotName}
-                        />
-                        <AvatarFallback className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white">
-                          <Bot size={16} />
-                        </AvatarFallback>
-                      </>
-                    ) : (
-                      <>
-                        <AvatarImage src="/placeholder.svg?height=32&width=32" alt={session.guestName} />
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                          <User size={16} />
-                        </AvatarFallback>
-                      </>
-                    )}
-                  </Avatar>
+                  {message.sender === "ai" ? (
+                    <div className="relative h-8 w-8">
+                      <CustomAvatar seed={session.chatbotName}/>
+                    </div>
+                  ) : (
+                    <div className="relative h-8 w-8 mt-1 rounded-full overflow-hidden bg-gradient-to-r from-purple-500 to-blue-500">
+                      <div className="absolute inset-0 flex items-center justify-center text-white">
+                        <User size={16} />
+                      </div>
+                    </div>
+                  )}
                   <div>
                     <div className={message.sender === "user" ? "message-bubble-user" : "message-bubble-ai"}>
                       {message.content}
                     </div>
                     <div
-                      className={`text-xs text-muted-foreground mt-1 ${message.sender === "user" ? "text-right" : "text-left"}`}
+                      className={`text-xs text-muted-foreground mt-1 ${
+                        message.sender === "user" ? "text-right" : "text-left"
+                      }`}
                     >
                       {new Date(message.timestamp).toLocaleTimeString()}
                     </div>
@@ -128,4 +196,3 @@ export default function ChatSessionPage() {
     </div>
   )
 }
-

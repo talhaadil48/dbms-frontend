@@ -135,7 +135,7 @@ export default function AdminLayout({
         </header>
 
         {/* Main content area */}
-        <main className="flex-1 overflow-auto p-6 pt-0 bg-background">
+        <main className="flex-1 overflow-auto p-6 pt-5 bg-background">
           {children}
         </main>
       </div>

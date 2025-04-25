@@ -1,204 +1,460 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bot, Plus, Trash2, Upload, Copy, Check } from "lucide-react"
-import { useToast } from "@/components/toast"
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Plus,
+  Trash2,
+  Copy,
+  Check,
+  Save,
+  ArrowLeft,
+  AlertCircle,
+} from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ElegantLoader } from "@/components/elegant-loader";
+import CustomAvatar from "@/components/avatar";
 
-// Mock data for existing chatbot
-const mockChatbot = {
-  id: 1,
-  name: "Customer Support Bot",
-  category: "customer-support",
-  avatarSeed: "bottts5678",
-  characteristics: [
-    { id: 1, content: "I am a helpful customer support assistant." },
-    { id: 2, content: "I can answer questions about products and services." },
-    { id: 3, content: "I'm always polite and professional." },
-  ],
+interface Characteristic {
+  id: number;
+  content: string;
+  created_at: string;
+}
+
+interface Chatbot {
+  id: number;
+  name: string;
+  created_at: string;
+  chatbot_characteristics: Characteristic[];
+  chat_sessions: any[]; // We don't need the full type for sessions in this page
 }
 
 export default function EditChatbotPage() {
-  const [chatbot, setChatbot] = useState(mockChatbot)
-  const [copied, setCopied] = useState(false)
-  const { addToast } = useToast()
-
+  const params = useParams();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [chatbot, setChatbot] = useState<Chatbot | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [newCharacteristic, setNewCharacteristic] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [chatbotName, setChatbotName] = useState("");
 
   useEffect(() => {
-    // In a real application, you would fetch the chatbot data here
-    setChatbot(mockChatbot)
-  }, [])
+    const fetchChatbot = async () => {
+      if (!params.id) return;
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const BASE_URL = "http://localhost:8000";
+        const response = await fetch(`${BASE_URL}/chatbots/${params.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch chatbot: ${response.status}`);
+        }
+
+        const data = (await response.json()) as Chatbot;
+        setChatbot(data);
+        setChatbotName(data.name);
+      } catch (error) {
+        console.error("Error fetching chatbot:", error);
+        setError(
+          error instanceof Error ? error.message : "An unknown error occurred"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChatbot();
+  }, [params.id]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChatbot({ ...chatbot, name: e.target.value })
-  }
+    setChatbotName(e.target.value);
+  };
 
-  const handleCategoryChange = (value: string) => {
-    setChatbot({ ...chatbot, category: value })
-  }
+  const handleSaveChanges = async () => {
+    if (!chatbot) return;
 
-  const handleAddCharacteristic = () => {
-    const newId = Math.max(...chatbot.characteristics.map((c) => c.id)) + 1
-    setChatbot({
-      ...chatbot,
-      characteristics: [...chatbot.characteristics, { id: newId, content: "" }],
-    })
-  }
+    setIsSaving(true);
+    try {
+      const BASE_URL = "http://localhost:8000";
+      const response = await fetch(`${BASE_URL}/update_chatbot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatbot_id: chatbot.id,
+          name: chatbotName,
+        }),
+      });
 
-  const handleRemoveCharacteristic = (id: number) => {
-    setChatbot({
-      ...chatbot,
-      characteristics: chatbot.characteristics.filter((c) => c.id !== id),
-    })
-  }
+      if (!response.ok) {
+        throw new Error("Failed to update chatbot");
+      }
 
-  const handleCharacteristicChange = (id: number, content: string) => {
-    setChatbot({
-      ...chatbot,
-      characteristics: chatbot.characteristics.map((c) => (c.id === id ? { ...c, content } : c)),
-    })
-  }
+      toast({
+        title: "Changes saved",
+        description: "Your chatbot has been updated successfully.",
+      });
 
-  const generateNewAvatar = () => {
-    const seeds = ["bottts", "pixel", "micah", "adventurer", "initials"]
-    const randomSeed = seeds[Math.floor(Math.random() * seeds.length)]
-    setChatbot({ ...chatbot, avatarSeed: randomSeed + Math.random().toString(36).substring(2, 8) })
-  }
+      // Update local state
+      setChatbot({
+        ...chatbot,
+        name: chatbotName,
+      });
+    } catch (error) {
+      console.error("Error updating chatbot:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to save changes. Please try again.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleAddCharacteristic = async () => {
+    if (!chatbot || !newCharacteristic.trim()) return;
+
+    try {
+      const BASE_URL = "http://localhost:8000";
+      const response = await fetch(`${BASE_URL}/characteristics`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatbot_id: chatbot.id,
+          content: newCharacteristic,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add characteristic");
+      }
+
+      // Refetch the chatbot to get the updated characteristics
+      const updatedChatbotResponse = await fetch(
+        `${BASE_URL}/chatbots/${chatbot.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!updatedChatbotResponse.ok) {
+        throw new Error("Failed to fetch updated chatbot");
+      }
+
+      const updatedChatbot = (await updatedChatbotResponse.json()) as Chatbot;
+      setChatbot(updatedChatbot);
+      setNewCharacteristic("");
+
+      toast({
+        title: "Characteristic added",
+        description: "Your chatbot characteristic has been added successfully.",
+      });
+    } catch (error) {
+      console.error("Error adding characteristic:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to add characteristic. Please try again.",
+      });
+    }
+  };
+
+  const handleRemoveCharacteristic = async (id: number) => {
+    if (!chatbot) return;
+
+    try {
+      const BASE_URL = "http://localhost:8000";
+      const response = await fetch(`${BASE_URL}/remove_characteristic`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          characteristic_id: id,
+        }),
+      });
+
+      if (!response.ok) {
+        console.log(response)
+      }
+
+      // Update local state
+      setChatbot({
+        ...chatbot,
+        chatbot_characteristics: chatbot.chatbot_characteristics.filter(
+          (c) => c.id !== id
+        ),
+      });
+
+      toast({
+        title: "Characteristic removed",
+        description:
+          "Your chatbot characteristic has been removed successfully.",
+      });
+    } catch (error) {
+      console.error("Error removing characteristic:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to remove characteristic. Please try again.",
+      });
+    }
+  };
 
   const copyLink = () => {
-    const link = `http://localhost:3000/chat/${chatbot.id}`
-    navigator.clipboard.writeText(link)
-    addToast({
-      type: "info",  // Options: "success", "error", "info", "warning", "default"
-      title: "Success", // Optional title
-      message: "Your action was completed successfully.",
-      duration: 2000,   // Optional, defaults to 5000ms (5 seconds)
-    })
-    setCopied(true)
-    
+    if (!chatbot) return;
+
+    const link = `http://localhost:3000/chat/${chatbot.id}`;
+    navigator.clipboard.writeText(link);
+    toast({
+      title: "Link copied",
+      description: "Chatbot link has been copied to clipboard.",
+    });
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+        <Button variant="outline" onClick={() => router.back()}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> Go Back
+        </Button>
+      </div>
+    );
+  }
+
+  if (!chatbot) {
+    return (
+      <div className="text-center p-6 bg-secondary/30 rounded-lg">
+        <h2 className="text-xl font-semibold">Chatbot Not Found</h2>
+        <p className="text-muted-foreground">
+          The requested chatbot could not be found.
+        </p>
+        <Button
+          variant="outline"
+          className="mt-4"
+          onClick={() => router.back()}
+        >
+          Go Back
+        </Button>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm py-4 border-b">
         <div className="flex items-center justify-between max-w-6xl mx-auto px-4">
-          <div className="pt-2 pb-2">
-            <h1 className="text-3xl font-bold tracking-tight">Edit Chatbot</h1>
-            <p className="text-muted-foreground">Modify your chatbot's characteristics and behavior.</p>
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onClick={() => router.back()}
+            >
+              <ArrowLeft size={20} />
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Edit Chatbot
+              </h1>
+              <p className="text-muted-foreground">
+                Customize your chatbot's behavior and responses
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="flex items-center space-x-2 bg-secondary/50 rounded-full px-4 py-2">
-              <span className="text-sm text-muted-foreground">Chat Link:</span>
-              <span className="text-sm font-medium">https://your-domain.com/chat/{chatbot.id}</span>
-              <Button size="icon" variant="ghost" onClick={copyLink}>
-                {copied ? <Check size={16} /> : <Copy size={16} />}
-              </Button>
-            </div>
-            <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
-              Save Changes
+            <Button
+              className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+              onClick={handleSaveChanges}
+              disabled={isSaving}
+            >
+              {isSaving ? (
+                <ElegantLoader />
+              ) : (
+                <>
+                  <Save size={16} className="mr-2" /> Save Changes
+                </>
+              )}
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-6 max-w-6xl mx-auto px-4">
-        <Card className="dark:neumorphic-dark light:neumorphic-light">
-          <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-            <CardDescription>Update the core details of your chatbot.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="chatbot-name">Chatbot Name</Label>
-              <Input id="chatbot-name" value={chatbot.name} onChange={handleNameChange} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select value={chatbot.category} onValueChange={handleCategoryChange}>
-                <SelectTrigger id="category">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="customer-support">Customer Support</SelectItem>
-                  <SelectItem value="sales">Sales</SelectItem>
-                  <SelectItem value="technical">Technical Support</SelectItem>
-                  <SelectItem value="onboarding">User Onboarding</SelectItem>
-                  <SelectItem value="faq">FAQ</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Chatbot Avatar</Label>
-              <div className="flex items-center gap-4">
-                <Avatar className="h-16 w-16">
-                  <AvatarImage
-                    src={`https://api.dicebear.com/7.x/${chatbot.avatarSeed.split(/[0-9]/)[0]}/svg?seed=${chatbot.avatarSeed}`}
-                    alt="Chatbot Avatar"
-                  />
-                  <AvatarFallback className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white">
-                    <Bot size={24} />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="space-y-2">
-                  <Button variant="outline" size="sm" onClick={generateNewAvatar} className="w-full">
-                    Generate Random
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full">
-                    <Upload size={14} className="mr-2" />
-                    Upload
-                  </Button>
+      <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto px-4">
+        <div className="md:col-span-1 space-y-6">
+          <Card className="dark:neumorphic-dark light:neumorphic-light">
+            <CardHeader>
+              <CardTitle>Chatbot Details</CardTitle>
+              <CardDescription>
+                Basic information about your chatbot
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-center mb-6">
+                <div className="relative h-24 w-24 rounded-full overflow-hidden bg-secondary">
+                  <CustomAvatar seed={chatbot.name} className="h-24 w-24" />
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card className="dark:neumorphic-dark light:neumorphic-light">
-          <CardHeader>
-            <CardTitle>Chatbot Characteristics</CardTitle>
-            <CardDescription>Define how your chatbot should behave and respond.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {chatbot.characteristics.map((characteristic) => (
-              <div key={characteristic.id} className="space-y-2 relative group">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor={`characteristic-${characteristic.id}`}>Characteristic {characteristic.id}</Label>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemoveCharacteristic(characteristic.id)}
-                    className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Trash2 size={14} className="text-destructive" />
-                  </Button>
-                </div>
-                <Textarea
-                  id={`characteristic-${characteristic.id}`}
-                  value={characteristic.content}
-                  onChange={(e) => handleCharacteristicChange(characteristic.id, e.target.value)}
-                  rows={3}
+              <div className="space-y-2">
+                <Label htmlFor="chatbot-name">Chatbot Name</Label>
+                <Input
+                  id="chatbot-name"
+                  value={chatbotName}
+                  onChange={handleNameChange}
+                  className="bg-secondary/30"
                 />
               </div>
-            ))}
 
-            <Button variant="outline" onClick={handleAddCharacteristic} className="w-full">
-              <Plus size={16} className="mr-2" />
-              Add Characteristic
-            </Button>
-          </CardContent>
-        </Card>
+              <div className="space-y-2">
+                <Label>Created On</Label>
+                <div className="text-sm text-muted-foreground">
+                  {new Date(chatbot.created_at).toLocaleDateString()} at{" "}
+                  {new Date(chatbot.created_at).toLocaleTimeString()}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Active Sessions</Label>
+                <div className="text-sm font-medium">
+                  {chatbot.chat_sessions.length} active conversations
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col items-stretch gap-2">
+              <div className="flex items-center justify-between bg-secondary/30 rounded-lg p-3 text-sm">
+                <span className="text-muted-foreground">Chat Link:</span>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={copyLink}
+                  className="h-8"
+                >
+                  {copied ? <Check size={14} /> : <Copy size={14} />}
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+
+        <div className="md:col-span-2">
+          <Card className="dark:neumorphic-dark light:neumorphic-light">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Chatbot Characteristics</CardTitle>
+                  <CardDescription>
+                    Define how your chatbot should behave and respond
+                  </CardDescription>
+                </div>
+                <Badge variant="outline" className="bg-secondary/30">
+                  {chatbot.chatbot_characteristics.length} Characteristics
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid gap-4">
+                {chatbot.chatbot_characteristics.map((characteristic) => (
+                  <div
+                    key={characteristic.id}
+                    className="bg-secondary/20 p-4 rounded-lg relative group transition-all hover:bg-secondary/30"
+                  >
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() =>
+                          handleRemoveCharacteristic(characteristic.id)
+                        }
+                        className="h-6 w-6 text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                    <p className="pr-8">{characteristic.content}</p>
+                    <div className="text-xs text-muted-foreground mt-2">
+                      Added on{" "}
+                      {new Date(characteristic.created_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-4 border-t">
+                <Label htmlFor="new-characteristic" className="mb-2 block">
+                  Add New Characteristic
+                </Label>
+                <div className="flex gap-2">
+                  <Textarea
+                    id="new-characteristic"
+                    placeholder="Enter a new characteristic for your chatbot..."
+                    value={newCharacteristic}
+                    onChange={(e) => setNewCharacteristic(e.target.value)}
+                    className="bg-secondary/20 min-h-[80px]"
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={handleAddCharacteristic}
+                  className="mt-2 w-full bg-secondary/20 hover:bg-secondary/30"
+                  disabled={!newCharacteristic.trim()}
+                >
+                  <Plus size={16} className="mr-2" />
+                  Add Characteristic
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
-  )
+  );
 }
-
