@@ -15,6 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import Image from "next/image";
 import {
   BarChart3,
   Bot,
@@ -65,12 +67,13 @@ export default function AdminLayout({
       >
         <div className="p-4 flex items-center justify-between border-b border-border">
           {!collapsed && (
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
-                <span className="text-sm font-bold text-white">CB</span>
-              </div>
-              <span className="font-bold">Chatbot Admin</span>
-            </div>
+            <div className="flex justify-center">
+                      <div className="flex items-center gap-2">
+                        <Image src="/logo.png" alt="NexusAI Logo" width={28} height={28} />
+                        <span className="font-bold text-xl">AxiomAI</span>
+                      </div>
+                    </div>
+            
           )}
           <Button
             variant="ghost"

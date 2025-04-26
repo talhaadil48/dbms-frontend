@@ -1,5 +1,5 @@
 "use client"
-
+import { useToast } from "@/components/toast"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Activity, Bot, MessageSquare, Users } from "lucide-react"
 import { ChatbotList } from "@/components/chatbot-list"
@@ -7,6 +7,8 @@ import { useUser } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
 import type { Chatbot, ChatSession } from "@/components/chatbot-list"
 import { ElegantLoader } from "@/components/elegant-loader"
+import Link from "next/link"
+import { set } from "date-fns"
 interface DashboardStats {
   totalUsers: number
   totalMessages: number
@@ -21,6 +23,7 @@ interface PercentageChanges {
 }
 
 export default function DashboardPage() {
+  const { addToast } = useToast()
   const { user } = useUser()
   const [chatbots, setChatbots] = useState<Chatbot[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -29,6 +32,7 @@ export default function DashboardPage() {
     totalMessages: 0,
     avgResponseTime: 0,
   })
+  const [error, setError] = useState<boolean>(false)
 
   const [percentageChanges, setPercentageChanges] = useState<PercentageChanges>({
     chatbots: "+0 from last month",
@@ -52,6 +56,7 @@ export default function DashboardPage() {
         })
 
         if (!response.ok) {
+          setError(true)
           throw new Error("Failed to fetch chatbots")
         }
 
@@ -70,7 +75,6 @@ export default function DashboardPage() {
 
     fetchChatbots()
   }, [user])
-
 
   // Calculate statistics from chatbot data
   const calculateStats = (chatbotData: Chatbot[]): void => {
@@ -132,7 +136,14 @@ export default function DashboardPage() {
 
     return changes[metric]
   }
-
+  const showToast = () => {
+    addToast({
+      type: "success",
+      title: "Success!",
+      message: "Your action was completed successfully.",
+      duration: 5000, // 5 seconds
+    })
+  }
   // Add this after the other useEffect
   useEffect(() => {
     // Only run on the client side after hydration
@@ -156,14 +167,69 @@ export default function DashboardPage() {
       generateRandomChanges()
     }
   }, [])
-  if (isLoading){
+  if (isLoading) {
     return (
-       <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
-         <ElegantLoader size="sm" text="Preparing your AI experience" />
-       </div>
-     )
-   
- }
+      <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
+      </div>
+    )
+  }
+
+  // Add error handling when no chatbots are found
+  if (error) {
+    return(
+    <div className="flex flex-col items-center justify-center min-h-[70vh] p-8">
+        <div className="w-full max-w-md bg-background/60 backdrop-blur-lg rounded-xl shadow-lg overflow-hidden border border-border/50 transition-all duration-300 hover:shadow-xl">
+          <div className="p-8 space-y-6">
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-lg opacity-70"></div>
+                <div className="relative bg-background rounded-full p-4">
+                  <Bot className="h-12 w-12 text-primary" />
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <h2 className="text-2xl font-bold tracking-tight">No Chatbots Yet</h2>
+              <p className="text-muted-foreground">
+                You haven't created any chatbots yet. Start building your first AI assistant!
+              </p>
+            </div>
+
+            <div className="pt-4">
+              <a
+                href="/create-chatbot"
+                className="flex items-center justify-center w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <Bot className="h-5 w-5" />
+                Create Your First Chatbot
+              </a>
+            </div>
+
+            <div className="pt-4 text-center">
+              <p className="text-xs text-muted-foreground">
+                Create custom AI assistants tailored to your specific needs in minutes.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-muted/30 p-4 border-t border-border/50">
+            <div className="flex justify-between items-center text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <MessageSquare className="h-4 w-4" />
+                <span>Unlimited messages</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                <span>User analytics</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -212,7 +278,8 @@ export default function DashboardPage() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : `${(stats.avgResponseTime + 0.2).toFixed(1)}s`}
+            <div className="text-2xl font-bold">
+              {isLoading ? "Loading..." : `${(stats.avgResponseTime + 0.2).toFixed(1)}s`}
             </div>
             <p className="text-xs text-muted-foreground">{percentageChanges.responseTime}</p>
           </CardContent>
@@ -220,7 +287,10 @@ export default function DashboardPage() {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Your Chatbots</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">Your Chatbots</h2>
+          
+        </div>
         {user && <ChatbotList userId={user.id} />}
       </div>
     </div>

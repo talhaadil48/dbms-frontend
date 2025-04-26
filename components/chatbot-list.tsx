@@ -154,15 +154,6 @@ export function ChatbotList({ userId }: ChatbotListProps) {
        </div>
      )
   }
-
-  if (error) {
-    return <div className="text-center py-8 text-red-500">{error}</div>
-  }
-
-  if (chatBots.length === 0) {
-    return <div className="text-center py-8">No chatbots found. Create your first chatbot to get started.</div>
-  }
-
   return (
     <div className="space-y-4">
       {chatBots.map((bot) => {

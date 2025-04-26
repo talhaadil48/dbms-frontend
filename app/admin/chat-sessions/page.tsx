@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronDown, ChevronUp, Search } from "lucide-react"
+import { ChevronDown, ChevronUp, Search,Bot,MessageSquare,Users } from "lucide-react"
 import Link from "next/link"
 import { ElegantLoader } from "@/components/elegant-loader"
 import { useUser } from "@clerk/nextjs"
@@ -99,6 +99,38 @@ export default function ChatSessionsPage() {
       chatbot.sessions.some((session) => session.guestName.toLowerCase().includes(searchTerm.toLowerCase())),
   )
 
+  // Add handling for empty search results
+  if (searchTerm && filteredChatbots.length === 0) {
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Chat Sessions</h1>
+            <p className="text-muted-foreground">View and analyze conversations between your chatbots and users.</p>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Search className="w-5 h-5 text-muted-foreground" />
+          <Input
+            placeholder="Search by chatbot or guest name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-sm"
+          />
+        </div>
+
+        <div className="flex flex-col items-center justify-center p-8 bg-secondary/30 rounded-lg">
+          <h2 className="text-xl font-semibold mb-2">No Results Found</h2>
+          <p className="text-muted-foreground">No chatbots or sessions match your search term "{searchTerm}".</p>
+          <Button variant="outline" className="mt-4" onClick={() => setSearchTerm("")}>
+            Clear Search
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   const toggleChatbot = (id: number) => {
     setExpandedChatbot(expandedChatbot === id ? null : id)
   }
@@ -106,31 +138,67 @@ export default function ChatSessionsPage() {
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
-      <ElegantLoader size="sm" text="Preparing your AI experience" />
-    </div>
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
+      </div>
     )
   }
 
   if (error) {
-    return (
-      <div className="text-center p-6 bg-red-50 rounded-lg">
-        <h2 className="text-xl font-semibold text-red-600">Error</h2>
-        <p className="text-red-500">{error}</p>
-        <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
-          Try Again
-        </Button>
+    return(
+    <div className="flex flex-col items-center justify-center min-h-[70vh] p-8">
+        <div className="w-full max-w-md bg-background/60 backdrop-blur-lg rounded-xl shadow-lg overflow-hidden border border-border/50 transition-all duration-300 hover:shadow-xl">
+          <div className="p-8 space-y-6">
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-lg opacity-70"></div>
+                <div className="relative bg-background rounded-full p-4">
+                  <Bot className="h-12 w-12 text-primary" />
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <h2 className="text-2xl font-bold tracking-tight">No Chatbots Yet</h2>
+              <p className="text-muted-foreground">
+                You haven't created any chatbots yet. Start building your first AI assistant!
+              </p>
+            </div>
+
+            <div className="pt-4">
+              <a
+                href="/create-chatbot"
+                className="flex items-center justify-center w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <Bot className="h-5 w-5" />
+                Create Your First Chatbot
+              </a>
+            </div>
+
+            <div className="pt-4 text-center">
+              <p className="text-xs text-muted-foreground">
+                Create custom AI assistants tailored to your specific needs in minutes.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-muted/30 p-4 border-t border-border/50">
+            <div className="flex justify-between items-center text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <MessageSquare className="h-4 w-4" />
+                <span>Unlimited messages</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                <span>User analytics</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 
-  if (chatbots.length === 0) {
-    return (
-      <div className="text-center p-6 bg-secondary/30 rounded-lg">
-        <h2 className="text-xl font-semibold">No Chatbots Found</h2>
-        <p className="text-muted-foreground">You don't have any chatbots with active sessions yet.</p>
-      </div>
-    )
-  }
+  
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -158,7 +226,7 @@ export default function ChatSessionsPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="relative h-12 w-12">
-                    <CustomAvatar seed={chatbot.name}/>
+                    <CustomAvatar seed={chatbot.name} />
                   </div>
                   <div>
                     <CardTitle className="text-lg">{chatbot.name}</CardTitle>
