@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronDown, ChevronUp, Search,Bot,MessageSquare,Users } from "lucide-react"
+import { ChevronDown, ChevronUp, Search, Bot, MessageSquare, Users } from "lucide-react"
 import Link from "next/link"
 import { ElegantLoader } from "@/components/elegant-loader"
 import { useUser } from "@clerk/nextjs"
@@ -138,14 +138,16 @@ export default function ChatSessionsPage() {
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
-        <ElegantLoader size="sm" text="Preparing your AI experience" />
-      </div>
+       
+          <ElegantLoader size="sm" text="Preparing your AI experience" />
+        </div>
+    
     )
   }
 
   if (error) {
-    return(
-    <div className="flex flex-col items-center justify-center min-h-[70vh] p-8">
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] p-8">
         <div className="w-full max-w-md bg-background/60 backdrop-blur-lg rounded-xl shadow-lg overflow-hidden border border-border/50 transition-all duration-300 hover:shadow-xl">
           <div className="p-8 space-y-6">
             <div className="flex justify-center">
@@ -167,7 +169,7 @@ export default function ChatSessionsPage() {
             <div className="pt-4">
               <a
                 href="/create-chatbot"
-                className="flex items-center justify-center w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                className="flex items-center justify-center w-full gap-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
                 <Bot className="h-5 w-5" />
                 Create Your First Chatbot
@@ -198,13 +200,13 @@ export default function ChatSessionsPage() {
     )
   }
 
-  
-
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Chat Sessions</h1>
+          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-purple-700">
+            Chat Sessions
+          </h1>
           <p className="text-muted-foreground">View and analyze conversations between your chatbots and users.</p>
         </div>
       </div>
@@ -215,25 +217,31 @@ export default function ChatSessionsPage() {
           placeholder="Search by chatbot or guest name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
+          className="max-w-sm focus-visible:ring-purple-400/30 border-purple-200/30"
         />
       </div>
 
       <div className="space-y-4">
         {filteredChatbots.map((chatbot) => (
-          <Card key={chatbot.id} className="dark:neumorphic-dark light:neumorphic-light">
-            <CardHeader className="cursor-pointer" onClick={() => toggleChatbot(chatbot.id)}>
+          <Card
+            key={chatbot.id}
+            className="dark:neumorphic-dark light:neumorphic-light border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm"
+          >
+            <CardHeader
+              className="cursor-pointer border-b border-purple-100/10"
+              onClick={() => toggleChatbot(chatbot.id)}
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="relative h-12 w-12">
                     <CustomAvatar seed={chatbot.name} />
                   </div>
                   <div>
-                    <CardTitle className="text-lg">{chatbot.name}</CardTitle>
+                    <CardTitle className="text-lg text-purple-900/80 dark:text-purple-100/90">{chatbot.name}</CardTitle>
                     <CardDescription>{chatbot.sessions.length} active sessions</CardDescription>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="hover:bg-purple-100/10 hover:text-purple-700">
                   {expandedChatbot === chatbot.id ? (
                     <>
                       <ChevronUp size={16} className="mr-2" />
@@ -254,7 +262,7 @@ export default function ChatSessionsPage() {
                   {chatbot.sessions.length > 0 ? (
                     chatbot.sessions.map((session) => (
                       <Link key={session.id} href={`/admin/chat-sessions/${session.id}`}>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-purple-50/10 dark:bg-purple-900/10 hover:bg-purple-100/20 dark:hover:bg-purple-800/20 transition-colors cursor-pointer">
                           <div>
                             <div className="font-medium">{session.guestName}</div>
                             <div className="text-sm text-muted-foreground">{session.lastMessage}</div>
@@ -266,7 +274,7 @@ export default function ChatSessionsPage() {
                       </Link>
                     ))
                   ) : (
-                    <div className="text-center p-4 bg-secondary/30 rounded-lg">
+                    <div className="text-center p-4 bg-purple-50/10 dark:bg-purple-900/10 rounded-lg">
                       <p className="text-muted-foreground">No active sessions for this chatbot.</p>
                     </div>
                   )}
