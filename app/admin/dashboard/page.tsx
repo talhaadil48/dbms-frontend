@@ -212,7 +212,8 @@ export default function DashboardPage() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : `${stats.avgResponseTime + 0.2}s`}</div>
+            <div className="text-2xl font-bold">{isLoading ? "Loading..." : `${(stats.avgResponseTime + 0.2).toFixed(1)}s`}
+            </div>
             <p className="text-xs text-muted-foreground">{percentageChanges.responseTime}</p>
           </CardContent>
         </Card>

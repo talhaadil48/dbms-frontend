@@ -165,7 +165,7 @@ export default function ChatSessionPage() {
                   className={`flex gap-2 max-w-[80%] ${message.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
                 >
                   {message.sender === "ai" ? (
-                    <div className="relative h-8 w-8">
+                    <div className="relative h-8 w-8 mt-2">
                       <CustomAvatar seed={session.chatbotName}/>
                     </div>
                   ) : (
