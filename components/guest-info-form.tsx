@@ -10,11 +10,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Zap } from "lucide-react"
 
 interface GuestInfoFormProps {
-  onSubmit: (name: string, email: string) => void,
+  onSubmit: (name: string, email: string) => void
   chatbotName: string
 }
 
-export function GuestInfoForm({ onSubmit,chatbotName }: GuestInfoFormProps) {
+export function GuestInfoForm({ onSubmit, chatbotName }: GuestInfoFormProps) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
@@ -34,16 +34,16 @@ export function GuestInfoForm({ onSubmit,chatbotName }: GuestInfoFormProps) {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="w-full max-w-md animate-fade-in">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center animate-pulse-glow">
-              <Zap size={32} className="text-primary-foreground" />
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary flex items-center justify-center animate-pulse-glow">
+              <Zap size={24} className="text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold gradient-text">{`Welcome to ${chatbotName}`}</CardTitle>
-          <CardDescription>Enter your details to start chatting with our AI</CardDescription>
+          <CardTitle className="text-xl sm:text-2xl font-bold gradient-text">{`Welcome to ${chatbotName}`}</CardTitle>
+          <CardDescription className="text-sm">Enter your details to start chatting with our AI</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -70,7 +70,7 @@ export function GuestInfoForm({ onSubmit,chatbotName }: GuestInfoFormProps) {
                 }}
                 required
               />
-              {emailError && <p className="text-sm text-destructive">{emailError}</p>}
+              {emailError && <p className="text-xs sm:text-sm text-destructive">{emailError}</p>}
             </div>
           </CardContent>
           <CardFooter>
@@ -83,4 +83,3 @@ export function GuestInfoForm({ onSubmit,chatbotName }: GuestInfoFormProps) {
     </div>
   )
 }
-

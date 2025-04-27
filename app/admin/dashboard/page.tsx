@@ -168,9 +168,7 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
-        
-          <ElegantLoader size="sm" text="Preparing your AI experience" />
-       
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
       </div>
     )
   }
@@ -231,64 +229,63 @@ export default function DashboardPage() {
     )
   }
 
+  // Update the dashboard cards to be responsive
   return (
     <div className="space-y-6 animate-fade-in">
-      <h1 className="text-3xl font-bold tracking-tight dark:dark:text-gray-400">
-        Dashboard
-      </h1>
-      <p className="text-muted-foreground">
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight dark:dark:text-gray-400">Dashboard</h1>
+      <p className="text-sm md:text-base text-muted-foreground">
         Welcome to your chatbot admin dashboard. Here's an overview of your chatbots and platform statistics.
       </p>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Total Chatbots
             </CardTitle>
             <Bot className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : chatbots.length}</div>
+            <div className="text-xl md:text-2xl font-bold">{isLoading ? "Loading..." : chatbots.length}</div>
             <p className="text-xs text-muted-foreground">{percentageChanges.chatbots}</p>
           </CardContent>
         </Card>
 
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Total Users
             </CardTitle>
             <Users className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : stats.totalUsers}</div>
+            <div className="text-xl md:text-2xl font-bold">{isLoading ? "Loading..." : stats.totalUsers}</div>
             <p className="text-xs text-muted-foreground">{percentageChanges.users}</p>
           </CardContent>
         </Card>
 
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Total Messages
             </CardTitle>
             <MessageSquare className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : stats.totalMessages}</div>
+            <div className="text-xl md:text-2xl font-bold">{isLoading ? "Loading..." : stats.totalMessages}</div>
             <p className="text-xs text-muted-foreground">{percentageChanges.messages}</p>
           </CardContent>
         </Card>
 
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Avg. Response Time
             </CardTitle>
             <Activity className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold">
+            <div className="text-xl md:text-2xl font-bold">
               {isLoading ? "Loading..." : `${(stats.avgResponseTime + 0.2).toFixed(1)}s`}
             </div>
             <p className="text-xs text-muted-foreground">{percentageChanges.responseTime}</p>
@@ -298,9 +295,7 @@ export default function DashboardPage() {
 
       <div className="mt-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold dark:dark:text-gray-400">
-            Your Chatbots
-          </h2>
+          <h2 className="text-xl md:text-2xl font-bold dark:dark:text-gray-400">Your Chatbots</h2>
         </div>
         {user && <ChatbotList userId={user.id} />}
       </div>

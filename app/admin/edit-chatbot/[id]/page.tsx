@@ -229,9 +229,7 @@ export default function EditChatbotPage() {
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
-        
-          <ElegantLoader size="sm" text="Preparing your AI experience" />
-        
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
       </div>
     )
   }
@@ -262,10 +260,11 @@ export default function EditChatbotPage() {
     )
   }
 
+  // Update the edit chatbot page to be responsive
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm py-4 border-b border-purple-200/20">
-        <div className="flex items-center justify-between max-w-6xl mx-auto px-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 max-w-6xl mx-auto px-4">
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
@@ -276,15 +275,15 @@ export default function EditChatbotPage() {
               <ArrowLeft size={20} />
             </Button>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight dark:dark:text-gray-400">
-                Edit Chatbot
-              </h1>
-              <p className="text-muted-foreground">Customize your chatbot's behavior and responses</p>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight dark:dark:text-gray-400">Edit Chatbot</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                Customize your chatbot's behavior and responses
+              </p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-full sm:w-auto">
             <Button
-              className="text-white bg-purple-900/80 hover:bg-purple-900/40 "
+              className="text-white bg-purple-900/80 hover:bg-purple-900/40 w-full sm:w-auto"
               onClick={handleSaveChanges}
               disabled={isSaving}
             >
@@ -304,13 +303,15 @@ export default function EditChatbotPage() {
         <div className="md:col-span-1 space-y-6">
           <Card className="dark:neumorphic-dark light:neumorphic-light shadow-md">
             <CardHeader className="border-b border-purple-100/10 pb-4">
-              <CardTitle className="text-purple-900/80 dark:text-purple-100/90">Chatbot Details</CardTitle>
+              <CardTitle className="text-base sm:text-lg text-purple-900/80 dark:text-purple-100/90">
+                Chatbot Details
+              </CardTitle>
               <CardDescription>Basic information about your chatbot</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 pt-6">
               <div className="flex justify-center mb-6">
-                <div className="relative h-24 w-24 rounded-full overflow-hidden bg-secondary ring-2 ring-purple-300/20 ring-offset-2 ring-offset-background">
-                  <CustomAvatar seed={chatbot.name} className="h-24 w-24" />
+                <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-full overflow-hidden bg-secondary ring-2 ring-purple-300/20 ring-offset-2 ring-offset-background">
+                  <CustomAvatar seed={chatbot.name} className="h-20 w-20 sm:h-24 sm:w-24" />
                 </div>
               </div>
 
@@ -328,7 +329,7 @@ export default function EditChatbotPage() {
 
               <div className="space-y-2">
                 <Label className="text-purple-900/80 dark:text-purple-100/90">Created On</Label>
-                <div className="text-sm text-muted-foreground bg-purple-50/10 dark:bg-purple-900/10 p-2 rounded-md">
+                <div className="text-xs sm:text-sm text-muted-foreground bg-purple-50/10 dark:bg-purple-900/10 p-2 rounded-md">
                   {new Date(chatbot.created_at).toLocaleDateString()} at{" "}
                   {new Date(chatbot.created_at).toLocaleTimeString()}
                 </div>
@@ -336,13 +337,13 @@ export default function EditChatbotPage() {
 
               <div className="space-y-2">
                 <Label className="text-purple-900/80 dark:text-purple-100/90">Active Sessions</Label>
-                <div className="text-sm font-medium bg-purple-50/10 dark:bg-purple-900/10 p-2 rounded-md">
+                <div className="text-xs sm:text-sm font-medium bg-purple-50/10 dark:bg-purple-900/10 p-2 rounded-md">
                   {chatbot.chat_sessions.length} active conversations
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex flex-col items-stretch gap-2 border-t border-purple-100/10 pt-4">
-              <div className="flex items-center justify-between bg-purple-50/20 dark:bg-purple-900/10 rounded-lg p-3 text-sm">
+              <div className="flex items-center justify-between bg-purple-50/20 dark:bg-purple-900/10 rounded-lg p-3 text-xs sm:text-sm">
                 <span className="text-muted-foreground">Chat Link:</span>
                 <Button
                   size="sm"
@@ -362,7 +363,9 @@ export default function EditChatbotPage() {
             <CardHeader className="border-b border-purple-100/10 pb-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-purple-900/80 dark:text-purple-100/90">Chatbot Characteristics</CardTitle>
+                  <CardTitle className="text-base sm:text-lg text-purple-900/80 dark:text-purple-100/90">
+                    Chatbot Characteristics
+                  </CardTitle>
                   <CardDescription>Define how your chatbot should behave and respond</CardDescription>
                 </div>
                 <Badge variant="outline" className="bg-purple-50/20 dark:bg-purple-900/10 border-purple-200/30">
@@ -387,7 +390,7 @@ export default function EditChatbotPage() {
                         <Trash2 size={14} />
                       </Button>
                     </div>
-                    <p className="pr-8">{characteristic.content}</p>
+                    <p className="pr-8 text-xs sm:text-sm">{characteristic.content}</p>
                     <div className="text-xs text-muted-foreground mt-2">
                       Added on {new Date(characteristic.created_at).toLocaleDateString()}
                     </div>
@@ -405,7 +408,7 @@ export default function EditChatbotPage() {
                     placeholder="Enter a new characteristic for your chatbot..."
                     value={newCharacteristic}
                     onChange={(e) => setNewCharacteristic(e.target.value)}
-                    className="bg-secondary/20 min-h-[80px] focus-visible:ring-purple-400/30"
+                    className="bg-secondary/20 min-h-[80px] focus-visible:ring-purple-400/30 text-xs sm:text-sm"
                   />
                 </div>
                 <Button

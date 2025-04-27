@@ -138,10 +138,8 @@ export default function ChatSessionsPage() {
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
-       
-          <ElegantLoader size="sm" text="Preparing your AI experience" />
-        </div>
-    
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
+      </div>
     )
   }
 
@@ -204,10 +202,10 @@ export default function ChatSessionsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:dark:text-gray-400">
-            Chat Sessions
-          </h1>
-          <p className="text-muted-foreground">View and analyze conversations between your chatbots and users.</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight dark:dark:text-gray-400">Chat Sessions</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
+            View and analyze conversations between your chatbots and users.
+          </p>
         </div>
       </div>
 
@@ -228,33 +226,33 @@ export default function ChatSessionsPage() {
             className="dark:neumorphic-dark light:neumorphic-light border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm"
           >
             <CardHeader
-              className="cursor-pointer border-b border-purple-100/10"
+              className="cursor-pointer border-b border-purple-100/10 flex flex-col sm:flex-row items-start sm:items-center gap-4"
               onClick={() => toggleChatbot(chatbot.id)}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="relative h-12 w-12">
-                    <CustomAvatar seed={chatbot.name} />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg text-gray-700 dark:text-purple-100/90">{chatbot.name}</CardTitle>
-                    <CardDescription>{chatbot.sessions.length} active sessions</CardDescription>
-                  </div>
+              <div className="flex items-center space-x-4">
+                <div className="relative h-10 w-10 sm:h-12 sm:w-12">
+                  <CustomAvatar seed={chatbot.name} />
                 </div>
-                <Button variant="ghost" size="sm" className="hover:bg-purple-100/10 hover:text-purple-700">
-                  {expandedChatbot === chatbot.id ? (
-                    <>
-                      <ChevronUp size={16} className="mr-2" />
-                      Hide Sessions
-                    </>
-                  ) : (
-                    <>
-                      <ChevronDown size={16} className="mr-2" />
-                      View Sessions
-                    </>
-                  )}
-                </Button>
+                <div>
+                  <CardTitle className="text-base sm:text-lg text-gray-700 dark:text-purple-100/90">
+                    {chatbot.name}
+                  </CardTitle>
+                  <CardDescription>{chatbot.sessions.length} active sessions</CardDescription>
+                </div>
               </div>
+              <Button variant="ghost" size="sm" className="hover:bg-purple-100/10 hover:text-purple-700 ml-auto">
+                {expandedChatbot === chatbot.id ? (
+                  <>
+                    <ChevronUp size={16} className="mr-2" />
+                    Hide Sessions
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown size={16} className="mr-2" />
+                    View Sessions
+                  </>
+                )}
+              </Button>
             </CardHeader>
             {expandedChatbot === chatbot.id && (
               <CardContent>
@@ -262,12 +260,14 @@ export default function ChatSessionsPage() {
                   {chatbot.sessions.length > 0 ? (
                     chatbot.sessions.map((session) => (
                       <Link key={session.id} href={`/admin/chat-sessions/${session.id}`}>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-purple-50/10 dark:bg-purple-900/10 hover:bg-purple-100/20 dark:hover:bg-purple-800/20 transition-colors cursor-pointer">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg bg-purple-50/10 dark:bg-purple-900/10 hover:bg-purple-100/20 dark:hover:bg-purple-800/20 transition-colors cursor-pointer gap-2">
                           <div>
-                            <div className="font-medium">{session.guestName}</div>
-                            <div className="text-sm text-muted-foreground">{session.lastMessage}</div>
+                            <div className="font-medium text-sm sm:text-base">{session.guestName}</div>
+                            <div className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
+                              {session.lastMessage}
+                            </div>
                           </div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-xs sm:text-sm text-muted-foreground">
                             {new Date(session.timestamp).toLocaleString()}
                           </div>
                         </div>
@@ -275,7 +275,7 @@ export default function ChatSessionsPage() {
                     ))
                   ) : (
                     <div className="text-center p-4 bg-purple-50/10 dark:bg-purple-900/10 rounded-lg">
-                      <p className="text-muted-foreground">No active sessions for this chatbot.</p>
+                      <p className="text-muted-foreground text-sm">No active sessions for this chatbot.</p>
                     </div>
                   )}
                 </div>

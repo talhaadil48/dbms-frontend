@@ -170,10 +170,14 @@ export default function CreateChatbotPage() {
 
   return (
     <div className="space-y-8 animate-fade-in max-w-5xl mx-auto">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:dark:dark:text-gray-400">Create Your AI Assistant</h1>
-          <p className="text-muted-foreground">Design a custom chatbot with unique characteristics and behavior</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight dark:dark:dark:text-gray-400">
+            Create Your AI Assistant
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Design a custom chatbot with unique characteristics and behavior
+          </p>
         </div>
       </div>
 
@@ -183,7 +187,7 @@ export default function CreateChatbotPage() {
           <div className="flex items-center justify-center">
             <div className="flex items-center w-full max-w-md">
               <div
-                className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full ${
                   currentStep >= 1 ? "bg-purple-900/80 text-white" : "bg-muted text-muted-foreground"
                 } transition-colors duration-300`}
               >
@@ -195,7 +199,7 @@ export default function CreateChatbotPage() {
                 } transition-colors duration-300`}
               ></div>
               <div
-                className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full ${
                   currentStep >= 2 ? "bg-purple-900/80 text-white" : "bg-muted text-muted-foreground"
                 } transition-colors duration-300`}
               >
@@ -205,8 +209,8 @@ export default function CreateChatbotPage() {
           </div>
           <div className="flex justify-center mt-2">
             <div className="flex w-full max-w-md">
-              <div className="flex-1 text-center text-sm font-medium">Basic Info</div>
-              <div className="flex-1 text-center text-sm font-medium">Characteristics</div>
+              <div className="flex-1 text-center text-xs sm:text-sm font-medium">Basic Info</div>
+              <div className="flex-1 text-center text-xs sm:text-sm font-medium">Characteristics</div>
             </div>
           </div>
         </div>
@@ -216,13 +220,13 @@ export default function CreateChatbotPage() {
           <div className="animate-fade-in">
             <Card className="overflow-hidden">
               <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-bold">Basic Information</CardTitle>
+                <CardTitle className="text-xl sm:text-2xl font-bold">Basic Information</CardTitle>
                 <CardDescription>Let's start with the fundamentals of your AI assistant</CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-6">
                 <div className="flex flex-col md:flex-row gap-6 items-center">
-                  <div className="relative w-32 h-32">
+                  <div className="relative w-24 h-24 sm:w-32 sm:h-32">
                     <Avatar seed={chatbotName || "dsadjkldasda"} />
                   </div>
 
@@ -240,7 +244,7 @@ export default function CreateChatbotPage() {
                       </label>
                     </div>
 
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Give your AI assistant a memorable name that reflects its purpose and personality.
                     </p>
                   </div>
@@ -249,11 +253,11 @@ export default function CreateChatbotPage() {
                 <div>
                   <div className="flex items-start gap-3">
                     <div className="mt-1">
-                      <Sparkles className="h-5 w-5 text-purple-900/80" />
+                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-purple-900/80" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-sm">Chatbot Tip</h3>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <h3 className="font-medium text-xs sm:text-sm">Chatbot Tip</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                         Choose a name that's easy to remember and pronounce. Names that reflect your brand or the
                         chatbot's purpose tend to work best.
                       </p>
@@ -265,7 +269,7 @@ export default function CreateChatbotPage() {
               <CardFooter className="flex justify-end pt-4 border-t border-border">
                 <Button
                   onClick={nextStep}
-                  className="bg-gradient-to-r bg-purple-900/80 hover:bg-purple-900/40  text-white"
+                  className="bg-gradient-to-r bg-purple-900/80 hover:bg-purple-900/40 text-white"
                 >
                   Continue
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -280,16 +284,16 @@ export default function CreateChatbotPage() {
           <div className="animate-fade-in">
             <Card className="overflow-hidden">
               <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-bold">Define Characteristics</CardTitle>
+                <CardTitle className="text-xl sm:text-2xl font-bold">Define Characteristics</CardTitle>
                 <CardDescription>Shape your AI assistant's personality and behavior</CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-6">
                 <div className="flex items-center gap-4 mb-2">
-                  <div className="relative w-12 h-12">
+                  <div className="relative w-10 h-10 sm:w-12 sm:h-12">
                     <Avatar seed={chatbotName || "das"} />
                   </div>
-                  <h3 className="text-lg font-medium">{chatbotName || "Your AI Assistant"}</h3>
+                  <h3 className="text-base sm:text-lg font-medium">{chatbotName || "Your AI Assistant"}</h3>
                 </div>
 
                 <div className="space-y-4">
@@ -297,14 +301,14 @@ export default function CreateChatbotPage() {
                     {characteristics.map((char, index) => (
                       <div
                         key={char.id}
-                        className={`characteristic-pill characteristic-pill-${pillColors[index % pillColors.length]} flex items-center gap-1 group`}
+                        className={`characteristic-pill characteristic-pill-${pillColors[index % pillColors.length]} flex items-center gap-1 group text-xs sm:text-sm`}
                       >
                         <span>{char.content}</span>
                         <button
                           onClick={() => handleRemoveCharacteristic(char.id)}
                           className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                         >
-                          <Trash className="h-4 w-4 text-red-700" />
+                          <Trash className="h-3 w-3 sm:h-4 sm:w-4 text-red-700" />
                         </button>
                       </div>
                     ))}
@@ -316,7 +320,7 @@ export default function CreateChatbotPage() {
                       value={newCharacteristic}
                       onChange={(e) => setNewCharacteristic(e.target.value)}
                       placeholder="Add a new characteristic (e.g., I am friendly and helpful)"
-                      className="min-h-[80px] focus-visible:ring-gray-400"
+                      className="min-h-[80px] focus-visible:ring-gray-400 text-sm"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault()
@@ -326,11 +330,11 @@ export default function CreateChatbotPage() {
                     />
                   </div>
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
                     <Button
                       variant="outline"
                       onClick={() => setShowSuggestions(!showSuggestions)}
-                      className="border-purple-200 dark:border-purple-800/50"
+                      className="border-purple-200 dark:border-purple-800/50 w-full sm:w-auto"
                     >
                       <Lightbulb className="mr-2 h-4 w-4" />
                       {showSuggestions ? "Hide Suggestions" : "Show Suggestions"}
@@ -339,7 +343,7 @@ export default function CreateChatbotPage() {
                     <Button
                       onClick={handleAddCharacteristic}
                       disabled={!newCharacteristic.trim()}
-                      className="bg-purple-900/80 hover:bg-purple-900/40 text-white"
+                      className="bg-purple-900/80 hover:bg-purple-900/40 text-white w-full sm:w-auto"
                     >
                       <Plus className="mr-2 h-4 w-4" />
                       Add Characteristic
@@ -348,8 +352,8 @@ export default function CreateChatbotPage() {
 
                   {showSuggestions && (
                     <div className="animate-fade-in">
-                      <h4 className="font-medium text-sm mb-2 flex items-center">
-                        <Lightbulb className="mr-2 h-4 w-4 text-yellow-500" />
+                      <h4 className="font-medium text-xs sm:text-sm mb-2 flex items-center">
+                        <Lightbulb className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-yellow-500" />
                         Suggested Characteristics
                       </h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -357,7 +361,7 @@ export default function CreateChatbotPage() {
                           <button
                             key={index}
                             onClick={() => handleSuggestionClick(suggestion)}
-                            className="text-left text-sm p-2 rounded-md hover:bg-purple-100 dark:hover:bg-purple-800/30 transition-colors"
+                            className="text-left text-xs sm:text-sm p-2 rounded-md hover:bg-purple-100 dark:hover:bg-purple-800/30 transition-colors"
                           >
                             {suggestion}
                           </button>
@@ -368,15 +372,19 @@ export default function CreateChatbotPage() {
                 </div>
               </CardContent>
 
-              <CardFooter className="flex justify-between pt-4 border-t border-border">
-                <Button variant="outline" onClick={prevStep} className="border-purple-200 dark:border-purple-800/50">
+              <CardFooter className="flex flex-col sm:flex-row justify-between gap-2 pt-4 border-t border-border">
+                <Button
+                  variant="outline"
+                  onClick={prevStep}
+                  className="border-purple-200 dark:border-purple-800/50 w-full sm:w-auto"
+                >
                   Back
                 </Button>
                 <Button
                   variant="outline"
                   onClick={insertChatbot}
                   disabled={isSubmitting || (characteristics.length === 0 && !newCharacteristic.trim())}
-                  className="border-purple-200 dark:border-purple-800/50"
+                  className="border-purple-200 dark:border-purple-800/50 w-full sm:w-auto"
                 >
                   {isSubmitting ? (
                     <>Creating...</>

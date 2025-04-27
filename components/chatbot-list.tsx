@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Bot, Edit, Trash2, Plus } from "lucide-react"
+import { Edit, Trash2, Plus } from "lucide-react"
 import Link from "next/link"
 import { CharacteristicsManager } from "@/components/characteristics-manager"
 import { ElegantLoader } from "@/components/elegant-loader"
@@ -148,11 +148,11 @@ export function ChatbotList({ userId }: ChatbotListProps) {
   }
 
   if (loading) {
-   return (
-       <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
-         <ElegantLoader size="sm" text="Preparing your AI experience" />
-       </div>
-     )
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-50">
+        <ElegantLoader size="sm" text="Preparing your AI experience" />
+      </div>
+    )
   }
   return (
     <div className="space-y-4">
@@ -163,14 +163,14 @@ export function ChatbotList({ userId }: ChatbotListProps) {
 
         return (
           <Card key={bot.id} className="dark:neumorphic-dark light:neumorphic-light">
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
               <div className="flex items-center space-x-4">
                 <Avatar seed={bot.name}></Avatar>
                 <div>
-                  <CardTitle>{bot.name}</CardTitle>
+                  <CardTitle className="text-base md:text-lg">{bot.name}</CardTitle>
                 </div>
               </div>
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 w-full sm:w-auto justify-end">
                 <Button variant="outline" size="icon" asChild>
                   <Link href={`/admin/edit-chatbot/${bot.id}`}>
                     <Edit className="h-4 w-4 text-purple-500" />
@@ -184,7 +184,10 @@ export function ChatbotList({ userId }: ChatbotListProps) {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {limitedCharacteristics.map((char, index) => (
-                  <span key={index} className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-sm">
+                  <span
+                    key={index}
+                    className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs sm:text-sm"
+                  >
                     {char}
                   </span>
                 ))}

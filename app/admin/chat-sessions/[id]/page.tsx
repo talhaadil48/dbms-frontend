@@ -137,7 +137,7 @@ export default function ChatSessionPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-4">
           <Link href="/admin/chat-sessions">
             <Button variant="ghost" size="icon" className="rounded-full">
@@ -145,8 +145,8 @@ export default function ChatSessionPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">{session.chatbotName}</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-xl sm:text-3xl font-bold tracking-tight">{session.chatbotName}</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Conversation with {session.guestName} on {new Date(session.timestamp).toLocaleString()}
             </p>
           </div>
@@ -155,21 +155,21 @@ export default function ChatSessionPage() {
 
       <Card className="dark:neumorphic-dark light:neumorphic-light">
         <CardHeader>
-          <CardTitle>Chat Transcript</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Chat Transcript</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {session.messages.map((message) => (
               <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`flex gap-2 max-w-[80%] ${message.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
+                  className={`flex gap-2 max-w-[90%] sm:max-w-[80%] ${message.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
                 >
                   {message.sender === "ai" ? (
-                    <div className="relative h-8 w-8 mt-2">
-                      <CustomAvatar seed={session.chatbotName}/>
+                    <div className="relative h-8 w-8 mt-2 flex-shrink-0">
+                      <CustomAvatar seed={session.chatbotName} />
                     </div>
                   ) : (
-                    <div className="relative h-8 w-8 mt-1 rounded-full overflow-hidden bg-gradient-to-r from-purple-500 to-blue-500">
+                    <div className="relative h-8 w-8 mt-1 rounded-full overflow-hidden bg-gradient-to-r from-purple-500 to-blue-500 flex-shrink-0">
                       <div className="absolute inset-0 flex items-center justify-center text-white">
                         <User size={16} />
                       </div>
