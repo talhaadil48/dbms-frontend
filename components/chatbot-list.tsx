@@ -173,7 +173,7 @@ export function ChatbotList({ userId }: ChatbotListProps) {
               <div className="flex space-x-2">
                 <Button variant="outline" size="icon" asChild>
                   <Link href={`/admin/edit-chatbot/${bot.id}`}>
-                    <Edit className="h-4 w-4" />
+                    <Edit className="h-4 w-4 text-purple-500" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="icon" onClick={() => handleDelete(bot.id)}>

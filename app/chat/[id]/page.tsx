@@ -383,7 +383,9 @@ export default function ChatPage() {
 
   // Show guest form if needed
   if (showGuestForm) {
-    return <GuestInfoForm onSubmit={handleGuestInfoSubmit} />;
+    return chatbot ? (
+      <GuestInfoForm chatbotName={chatbot.name} onSubmit={handleGuestInfoSubmit} />
+    ) : null;
   }
 
   // Main chat interface

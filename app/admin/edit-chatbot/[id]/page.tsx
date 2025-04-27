@@ -276,7 +276,7 @@ export default function EditChatbotPage() {
               <ArrowLeft size={20} />
             </Button>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-purple-700">
+              <h1 className="text-3xl font-bold tracking-tight dark:dark:text-gray-400">
                 Edit Chatbot
               </h1>
               <p className="text-muted-foreground">Customize your chatbot's behavior and responses</p>
@@ -284,7 +284,7 @@ export default function EditChatbotPage() {
           </div>
           <div className="flex items-center gap-4">
             <Button
-              className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white"
+              className="text-white bg-purple-900/80 hover:bg-purple-900/40 "
               onClick={handleSaveChanges}
               disabled={isSaving}
             >

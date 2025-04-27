@@ -23,7 +23,7 @@ export default function LoginPage() {
         <div className="flex justify-center mb-6">
           <div className="flex items-center gap-2">
             <Image src="/logo.png" alt="NexusAI Logo" width={28} height={28} />
-            <span className="font-bold text-2xl">AxiomAI</span>
+            <span className="font-bold text-2xl">Oraclia</span>
           </div>
         </div>
         <SignIn routing="hash" fallbackRedirectUrl="/admin/dashboard" />

@@ -168,7 +168,7 @@ export default function ChatSessionsPage() {
 
             <div className="pt-4">
               <a
-                href="/create-chatbot"
+                href="/admin/create-chatbot"
                 className="flex items-center justify-center w-full gap-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
                 <Bot className="h-5 w-5" />
@@ -204,7 +204,7 @@ export default function ChatSessionsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-purple-700">
+          <h1 className="text-3xl font-bold tracking-tight dark:dark:text-gray-400">
             Chat Sessions
           </h1>
           <p className="text-muted-foreground">View and analyze conversations between your chatbots and users.</p>
@@ -212,13 +212,13 @@ export default function ChatSessionsPage() {
       </div>
 
       <div className="flex items-center space-x-2">
-        <Search className="w-5 h-5 text-muted-foreground" />
         <Input
           placeholder="Search by chatbot or guest name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm focus-visible:ring-purple-400/30 border-purple-200/30"
+          className="max-w-sm focus-visible:ring-gray-400"
         />
+        <Search className="w-5 h-5 text-muted-foreground" />
       </div>
 
       <div className="space-y-4">
@@ -237,7 +237,7 @@ export default function ChatSessionsPage() {
                     <CustomAvatar seed={chatbot.name} />
                   </div>
                   <div>
-                    <CardTitle className="text-lg text-purple-900/80 dark:text-purple-100/90">{chatbot.name}</CardTitle>
+                    <CardTitle className="text-lg text-gray-700 dark:text-purple-100/90">{chatbot.name}</CardTitle>
                     <CardDescription>{chatbot.sessions.length} active sessions</CardDescription>
                   </div>
                 </div>

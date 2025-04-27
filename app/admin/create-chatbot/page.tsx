@@ -117,6 +117,7 @@ export default function CreateChatbotPage() {
           })
 
           if (!response.ok) {
+            console.log(response)
             throw new Error("Failed to create characteristic")
           }
         }),
@@ -161,7 +162,7 @@ export default function CreateChatbotPage() {
     <div className="space-y-8 animate-fade-in max-w-5xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400">
+          <h1 className="text-3xl font-bold tracking-tight dark:dark:dark:text-gray-400">
             Create Your AI Assistant
           </h1>
           <p className="text-muted-foreground">Design a custom chatbot with unique characteristics and behavior</p>
@@ -175,19 +176,19 @@ export default function CreateChatbotPage() {
             <div className="flex items-center w-full max-w-md">
               <div
                 className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                  currentStep >= 1 ? "bg-purple-600 text-white" : "bg-muted text-muted-foreground"
+                  currentStep >= 1 ? "bg-purple-900/80 text-white" : "bg-muted text-muted-foreground"
                 } transition-colors duration-300`}
               >
                 1
               </div>
               <div
                 className={`flex-1 h-1 mx-2 ${
-                  currentStep >= 2 ? "bg-purple-600" : "bg-muted"
+                  currentStep >= 2 ? "bg-purple-900/80" : "bg-muted"
                 } transition-colors duration-300`}
               ></div>
               <div
                 className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                  currentStep >= 2 ? "bg-purple-600 text-white" : "bg-muted text-muted-foreground"
+                  currentStep >= 2 ? "bg-purple-900/80 text-white" : "bg-muted text-muted-foreground"
                 } transition-colors duration-300`}
               >
                 2
@@ -205,7 +206,7 @@ export default function CreateChatbotPage() {
         {/* Step 1: Basic Info */}
         {currentStep === 1 && (
           <div className="animate-fade-in">
-            <Card className="overflow-hidden border-purple-200/50 dark:border-purple-800/30 purple-gradient-light dark:purple-gradient-dark">
+            <Card className="overflow-hidden">
               <CardHeader className="pb-4">
                 <CardTitle className="text-2xl font-bold">Basic Information</CardTitle>
                 <CardDescription>Let's start with the fundamentals of your AI assistant</CardDescription>
@@ -214,7 +215,7 @@ export default function CreateChatbotPage() {
               <CardContent className="space-y-6">
                 <div className="flex flex-col md:flex-row gap-6 items-center">
                   <div className="relative w-32 h-32">
-                  <Avatar seed={chatbotName || "das"} />
+                  <Avatar seed={chatbotName || "dsadjkldasda"} />
 
                   </div>
 
@@ -224,7 +225,7 @@ export default function CreateChatbotPage() {
                         id="chatbot-name"
                         value={chatbotName}
                         onChange={(e) => setChatbotName(e.target.value)}
-                        className="w-full mb-4 border-purple-200 dark:border-purple-800/50 bg-white/50 dark:bg-black/20 focus-visible:ring-purple-500"
+                        className="w-full mb-4 focus-visible:ring-gray-400"
                         placeholder=" "
                       />
                       <label htmlFor="chatbot-name" className="text-muted-foreground">
@@ -238,10 +239,10 @@ export default function CreateChatbotPage() {
                   </div>
                 </div>
 
-                <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-100 dark:border-purple-800/30">
+                <div>
                   <div className="flex items-start gap-3">
                     <div className="mt-1">
-                      <Sparkles className="h-5 w-5 text-purple-500" />
+                      <Sparkles className="h-5 w-5 text-purple-900/80" />
                     </div>
                     <div>
                       <h3 className="font-medium text-sm">Chatbot Tip</h3>
@@ -257,7 +258,7 @@ export default function CreateChatbotPage() {
               <CardFooter className="flex justify-end pt-4 border-t border-border">
                 <Button
                   onClick={nextStep}
-                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
+                  className="bg-gradient-to-r bg-purple-900/80 hover:bg-purple-900/40  text-white"
                 >
                   Continue
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -270,7 +271,7 @@ export default function CreateChatbotPage() {
         {/* Step 2: Characteristics */}
         {currentStep === 2 && (
           <div className="animate-fade-in">
-            <Card className="overflow-hidden border-purple-200/50 dark:border-purple-800/30 purple-gradient-light dark:purple-gradient-dark">
+            <Card className="overflow-hidden">
               <CardHeader className="pb-4">
                 <CardTitle className="text-2xl font-bold">Define Characteristics</CardTitle>
                 <CardDescription>Shape your AI assistant's personality and behavior</CardDescription>
@@ -308,7 +309,7 @@ export default function CreateChatbotPage() {
                       value={newCharacteristic}
                       onChange={(e) => setNewCharacteristic(e.target.value)}
                       placeholder="Add a new characteristic (e.g., I am friendly and helpful)"
-                      className="min-h-[80px] border-purple-200 dark:border-purple-800/50 bg-white/50 dark:bg-black/20 focus-visible:ring-purple-500"
+                      className="min-h-[80px] focus-visible:ring-gray-400"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault()
@@ -322,7 +323,7 @@ export default function CreateChatbotPage() {
                     <Button
                       variant="outline"
                       onClick={() => setShowSuggestions(!showSuggestions)}
-                      className="text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800/50"
+                      className="border-purple-200 dark:border-purple-800/50"
                     >
                       <Lightbulb className="mr-2 h-4 w-4" />
                       {showSuggestions ? "Hide Suggestions" : "Show Suggestions"}
@@ -331,7 +332,7 @@ export default function CreateChatbotPage() {
                     <Button
                       onClick={handleAddCharacteristic}
                       disabled={!newCharacteristic.trim()}
-                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      className="bg-purple-900/80 hover:bg-purple-900/40 text-white"
                     >
                       <Plus className="mr-2 h-4 w-4" />
                       Add Characteristic
@@ -339,7 +340,7 @@ export default function CreateChatbotPage() {
                   </div>
 
                   {showSuggestions && (
-                    <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-100 dark:border-purple-800/30 animate-fade-in">
+                    <div className="animate-fade-in">
                       <h4 className="font-medium text-sm mb-2 flex items-center">
                         <Lightbulb className="mr-2 h-4 w-4 text-yellow-500" />
                         Suggested Characteristics
@@ -365,9 +366,10 @@ export default function CreateChatbotPage() {
                   Back
                 </Button>
                 <Button
+                variant="outline"
                   onClick={insertChatbot}
                   disabled={isSubmitting || characteristics.length === 0}
-                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
+                  className="border-purple-200 dark:border-purple-800/50"
                 >
                   {isSubmitting ? (
                     <>Creating...</>

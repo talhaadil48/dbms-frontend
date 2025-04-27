@@ -70,7 +70,7 @@ export default function AdminLayout({
             <div className="flex justify-center">
                       <div className="flex items-center gap-2">
                         <Image src="/logo.png" alt="NexusAI Logo" width={28} height={28} />
-                        <span className="font-bold text-xl">AxiomAI</span>
+                        <span className="font-bold text-xl">Oraclia</span>
                       </div>
                     </div>
             
@@ -111,7 +111,7 @@ export default function AdminLayout({
             onClick={() => signOut()}
             className={`w-full justify-start ${
               collapsed ? "px-2" : "px-3"
-            } text-destructive hover:text-destructive hover:bg-destructive/10`}
+            } text-gray-400`}
           >
             <LogOut size={20} className="mr-2" />
             {!collapsed && <span>Logout</span>}

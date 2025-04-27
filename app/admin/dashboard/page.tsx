@@ -199,7 +199,7 @@ export default function DashboardPage() {
 
             <div className="pt-4">
               <a
-                href="/create-chatbot"
+                href="/admin/create-chatbot"
                 className="flex items-center justify-center w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
                 <Bot className="h-5 w-5" />
@@ -233,7 +233,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-purple-700">
+      <h1 className="text-3xl font-bold tracking-tight dark:dark:text-gray-400">
         Dashboard
       </h1>
       <p className="text-muted-foreground">
@@ -243,7 +243,7 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-purple-900/80 dark:text-purple-100/90">
+            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Total Chatbots
             </CardTitle>
             <Bot className="h-4 w-4 text-purple-500" />
@@ -256,7 +256,7 @@ export default function DashboardPage() {
 
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-purple-900/80 dark:text-purple-100/90">
+            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Total Users
             </CardTitle>
             <Users className="h-4 w-4 text-purple-500" />
@@ -269,7 +269,7 @@ export default function DashboardPage() {
 
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-purple-900/80 dark:text-purple-100/90">
+            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Total Messages
             </CardTitle>
             <MessageSquare className="h-4 w-4 text-purple-500" />
@@ -282,7 +282,7 @@ export default function DashboardPage() {
 
         <Card className="dark:neumorphic-dark light:neumorphic-light transition-all hover:scale-105 border-purple-200/30 bg-white/80 dark:bg-black/80 shadow-md backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-purple-100/10">
-            <CardTitle className="text-sm font-medium text-purple-900/80 dark:text-purple-100/90">
+            <CardTitle className="text-sm font-medium text-gray-700 dark:text-purple-100/90">
               Avg. Response Time
             </CardTitle>
             <Activity className="h-4 w-4 text-purple-500" />
@@ -298,7 +298,7 @@ export default function DashboardPage() {
 
       <div className="mt-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-purple-700">
+          <h2 className="text-2xl font-bold dark:dark:text-gray-400">
             Your Chatbots
           </h2>
         </div>

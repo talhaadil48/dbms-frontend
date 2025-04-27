@@ -47,7 +47,7 @@ export const Toast: React.FC<ToastComponentProps> = ({ title, message, type, onC
       case "warning":
         return <AlertTriangle className="h-5 w-5 text-yellow-500" />
       default:
-        return <Info className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+        return <Info className="h-5 w-5 text-gray-500 dark:dark:dark:text-gray-400" />
     }
   }
 
@@ -81,7 +81,7 @@ export const Toast: React.FC<ToastComponentProps> = ({ title, message, type, onC
         className="flex-shrink-0 ml-1 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
         aria-label="Close toast"
       >
-        <X className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+        <X className="h-4 w-4 text-gray-500 dark:dark:dark:text-gray-400" />
       </button>
 
       {/* Progress bar */}

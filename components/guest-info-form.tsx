@@ -10,10 +10,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Zap } from "lucide-react"
 
 interface GuestInfoFormProps {
-  onSubmit: (name: string, email: string) => void
+  onSubmit: (name: string, email: string) => void,
+  chatbotName: string
 }
 
-export function GuestInfoForm({ onSubmit }: GuestInfoFormProps) {
+export function GuestInfoForm({ onSubmit,chatbotName }: GuestInfoFormProps) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
@@ -41,7 +42,7 @@ export function GuestInfoForm({ onSubmit }: GuestInfoFormProps) {
               <Zap size={32} className="text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold gradient-text">Welcome to AI Chat</CardTitle>
+          <CardTitle className="text-2xl font-bold gradient-text">{`Welcome to ${chatbotName}`}</CardTitle>
           <CardDescription>Enter your details to start chatting with our AI</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>

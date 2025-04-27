@@ -10,10 +10,14 @@ import { ToastProvider } from "@/components/toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Modern Chatbot Platform",
+  title: "Oraclia",
   description:
     "Professional, responsive chatbot platform with admin and guest interfaces",
   generator: "v0.dev",
+  applicationName: "Oraclia", 
+  icons : {
+    icon: "/logo.png",
+  }
 };
 
 export default function RootLayout({

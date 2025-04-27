@@ -29,7 +29,7 @@ export default function Home() {
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-6">
         <div className="flex items-center gap-2">
           <Image src="/logo.png" alt="NexusAI Logo" width={28} height={28} />
-          <span className="font-bold text-xl">AxiomAI</span>
+          <span className="font-bold text-xl">Oraclia</span>
         </div>
         <div className="flex items-center gap-4">
           <ModeToggle />
