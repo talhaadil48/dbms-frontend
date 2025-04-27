@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Bot, Sparkles, Plus, Trash, Save, ArrowRight, Lightbulb } from "lucide-react"
+import { Sparkles, Plus, Trash, Save, ArrowRight, Lightbulb } from "lucide-react"
 import { useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
@@ -72,7 +72,17 @@ export default function CreateChatbotPage() {
       return
     }
 
-    if (characteristics.length === 0) {
+    // Create a local copy of characteristics that we'll use for submission
+    const characteristicsToSubmit = [...characteristics]
+
+    // If there's text in the newCharacteristic field, add it to our submission array
+    if (newCharacteristic.trim()) {
+      const newId = characteristicsToSubmit.length > 0 ? Math.max(...characteristicsToSubmit.map((c) => c.id)) + 1 : 1
+      characteristicsToSubmit.push({ id: newId, content: newCharacteristic.trim() })
+    }
+
+    // Check if we have any characteristics to submit
+    if (characteristicsToSubmit.length === 0) {
       toast({
         title: "Characteristics required",
         description: "Please add at least one characteristic for your chatbot.",
@@ -102,9 +112,9 @@ export default function CreateChatbotPage() {
       const data = await response.json()
       const chatbotId = data.id
 
-      // Create all characteristics
+      // Create all characteristics using our local copy that includes any new characteristic
       await Promise.all(
-        characteristics.map(async (characteristic) => {
+        characteristicsToSubmit.map(async (characteristic) => {
           const response = await fetch(`${BASE_URL}/characteristics`, {
             method: "POST",
             headers: {
@@ -162,9 +172,7 @@ export default function CreateChatbotPage() {
     <div className="space-y-8 animate-fade-in max-w-5xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:dark:dark:text-gray-400">
-            Create Your AI Assistant
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight dark:dark:dark:text-gray-400">Create Your AI Assistant</h1>
           <p className="text-muted-foreground">Design a custom chatbot with unique characteristics and behavior</p>
         </div>
       </div>
@@ -215,8 +223,7 @@ export default function CreateChatbotPage() {
               <CardContent className="space-y-6">
                 <div className="flex flex-col md:flex-row gap-6 items-center">
                   <div className="relative w-32 h-32">
-                  <Avatar seed={chatbotName || "dsadjkldasda"} />
-
+                    <Avatar seed={chatbotName || "dsadjkldasda"} />
                   </div>
 
                   <div className="flex-1 space-y-4 w-full">
@@ -280,7 +287,7 @@ export default function CreateChatbotPage() {
               <CardContent className="space-y-6">
                 <div className="flex items-center gap-4 mb-2">
                   <div className="relative w-12 h-12">
-                  <Avatar seed={chatbotName || "das"} />
+                    <Avatar seed={chatbotName || "das"} />
                   </div>
                   <h3 className="text-lg font-medium">{chatbotName || "Your AI Assistant"}</h3>
                 </div>
@@ -366,9 +373,9 @@ export default function CreateChatbotPage() {
                   Back
                 </Button>
                 <Button
-                variant="outline"
+                  variant="outline"
                   onClick={insertChatbot}
-                  disabled={isSubmitting || characteristics.length === 0}
+                  disabled={isSubmitting || (characteristics.length === 0 && !newCharacteristic.trim())}
                   className="border-purple-200 dark:border-purple-800/50"
                 >
                   {isSubmitting ? (
