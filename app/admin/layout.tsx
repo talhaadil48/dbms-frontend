@@ -152,11 +152,7 @@ export default function AdminLayout({
         {/* Top navigation - only on desktop */}
         <header className="h-16 border-b border-border hidden md:flex items-center justify-between px-4 bg-card dark:neumorphic-dark light:neumorphic-light pt-[2.25rem] pb-[2.25rem]">
           <div className="text-lg font-semibold">
-            {pathname
-              .split("/")
-              .pop()
-              ?.replace("-", " ")
-              .replace(/\b\w/g, (l) => l.toUpperCase())}
+           
           </div>
           <div className="flex items-center gap-4">
             <ModeToggle />
