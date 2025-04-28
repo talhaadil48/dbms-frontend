@@ -53,7 +53,7 @@ interface ChatbotListProps {
 }
 
 export function ChatbotList({ userId }: ChatbotListProps) {
-  const BASE_URL = "http://localhost:8000"
+  const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
   const [chatBots, setChatBots] = useState<Chatbot[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

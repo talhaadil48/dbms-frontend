@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import CustomAvatar from "@/components/avatar"
 
 // Base URL for API calls
-const BASE_URL = "http://localhost:8000"
+const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
 
 interface Chatbot {
   id: number

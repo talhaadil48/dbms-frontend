@@ -56,7 +56,7 @@ export default function ChatSessionPage() {
       setError(null)
 
       try {
-        const BASE_URL = "http://localhost:8000"
+        const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
         const response = await fetch(`${BASE_URL}/chatsessionmessages/${params.id}`, {
           method: "GET",
           headers: {

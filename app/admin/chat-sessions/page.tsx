@@ -34,7 +34,7 @@ export default function ChatSessionsPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const BASE_URL = "http://localhost:8000"
+    const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
     const fetchChatbots = async () => {
       if (!user) return
       setIsLoading(true)

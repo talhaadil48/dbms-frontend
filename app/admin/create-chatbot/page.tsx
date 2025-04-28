@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast"
 import Avatar from "@/components/avatar"
 
 export default function CreateChatbotPage() {
-  const BASE_URL = "http://localhost:8000"
+  const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
   const { user } = useUser()
   const router = useRouter()
   const { toast } = useToast()
