@@ -263,7 +263,7 @@ export default function EditChatbotPage() {
   // Update the edit chatbot page to be responsive
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm py-4 border-b border-purple-200/20">
+      <div className= "bg-background/80 backdrop-blur-sm py-4 border-b border-purple-200/20">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 max-w-6xl mx-auto px-4">
           <div className="flex items-center space-x-4">
             <Button
