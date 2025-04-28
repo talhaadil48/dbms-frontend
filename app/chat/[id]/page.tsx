@@ -10,6 +10,12 @@ import { GuestInfoForm } from "@/components/guest-info-form"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import CustomAvatar from "@/components/avatar"
 
+// Add this style block after the imports
+const inputStyles = {
+  outline: "none",
+  boxShadow: "none",
+}
+
 // Base URL for API calls
 const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
 
@@ -472,7 +478,8 @@ export default function ChatPage() {
                 handleSendMessage()
               }
             }}
-            className="rounded-full text-sm"
+            className="rounded-full text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+            style={inputStyles}
           />
           <Button
             onClick={handleSendMessage}
