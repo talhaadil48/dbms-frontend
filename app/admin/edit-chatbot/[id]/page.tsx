@@ -51,7 +51,7 @@ export default function EditChatbotPage() {
       setError(null)
 
       try {
-        const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
+        const BASE_URL = "https://chatbot-jtwag8e36-talhas-projects-cc002d63.vercel.app"
         const response = await fetch(`${BASE_URL}/chatbots/${params.id}`, {
           method: "GET",
           headers: {
@@ -86,7 +86,7 @@ export default function EditChatbotPage() {
 
     setIsSaving(true)
     try {
-      const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
+      const BASE_URL = "https://chatbot-jtwag8e36-talhas-projects-cc002d63.vercel.app"
       const response = await fetch(`${BASE_URL}/update_chatbot`, {
         method: "POST",
         headers: {
@@ -128,7 +128,7 @@ export default function EditChatbotPage() {
     if (!chatbot || !newCharacteristic.trim()) return
 
     try {
-      const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
+      const BASE_URL = "https://chatbot-jtwag8e36-talhas-projects-cc002d63.vercel.app"
       const response = await fetch(`${BASE_URL}/characteristics`, {
         method: "POST",
         headers: {
@@ -178,7 +178,7 @@ export default function EditChatbotPage() {
     if (!chatbot) return
 
     try {
-      const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
+      const BASE_URL = "https://chatbot-jtwag8e36-talhas-projects-cc002d63.vercel.app"
       const response = await fetch(`${BASE_URL}/remove_characteristic`, {
         method: "POST",
         headers: {

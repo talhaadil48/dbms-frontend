@@ -41,7 +41,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setIsLoading(true)
-    const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
+    const BASE_URL = "https://chatbot-jtwag8e36-talhas-projects-cc002d63.vercel.app"
     const fetchChatbots = async () => {
       if (!user) return
       setIsLoading(true)
