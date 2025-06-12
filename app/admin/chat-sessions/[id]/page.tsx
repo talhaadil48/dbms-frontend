@@ -56,7 +56,7 @@ export default function ChatSessionPage() {
       setError(null)
 
       try {
-        const BASE_URL = "https://chatbot-jtwag8e36-talhas-projects-cc002d63.vercel.app"
+        const BASE_URL = "https://chatbot-ai-mocha.vercel.app"
         const response = await fetch(`${BASE_URL}/chatsessionmessages/${params.id}`, {
           method: "GET",
           headers: {
