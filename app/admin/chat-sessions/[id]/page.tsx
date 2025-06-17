@@ -70,20 +70,20 @@ export default function ChatSessionPage() {
 
         const data = (await response.json()) as ChatSessionResponse
 
-        // Transform the data to match the expected structure
         const formattedSession: FormattedChatSession = {
           id: data.id,
           chatbotName: data.chatbots?.name || "Unknown Chatbot",
-          // Generate a consistent avatar seed based on chatbot name
           chatbotAvatar: `bottts${data.id}`,
           guestName: data.guests?.name || "Unknown Guest",
           timestamp: data.created_at,
-          messages: data.messages.map((message) => ({
-            id: message.id,
-            content: message.content,
-            sender: message.sender,
-            timestamp: message.created_at,
-          })),
+          messages: data.messages
+            .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+            .map((message) => ({
+              id: message.id,
+              content: message.content,
+              sender: message.sender,
+              timestamp: message.created_at,
+            })),
         }
 
         setSession(formattedSession)
